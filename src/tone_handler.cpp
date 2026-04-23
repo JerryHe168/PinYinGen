@@ -114,10 +114,20 @@ char32_t ToneHandler::get_tone_mark(char vowel, int tone) {
 }
 
 std::string ToneHandler::tone_to_mark(std::string_view pinyin) {
-    std::string base = remove_tone(pinyin);
-    
     int tone = 0;
-    if (!base.empty()) {
+    std::string input(pinyin);
+    
+    if (!input.empty()) {
+        char last = input.back();
+        if (last >= '1' && last <= '4') {
+            tone = last - '0';
+            input.pop_back();
+        }
+    }
+    
+    std::string base = remove_tone(input);
+    
+    if (tone == 0 && !base.empty()) {
         char last = base.back();
         if (last >= '1' && last <= '4') {
             tone = last - '0';
