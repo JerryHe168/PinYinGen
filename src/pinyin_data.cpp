@@ -989,6 +989,12 @@ void PinyinData::init_builtin_data() {
         {U'佟', {"tóng"}},
         {U'那', {"nà", "nǎ", "nèi", "nā"}},
     };
+    
+    for (auto& entry : pinyin_map_) {
+        for (auto& pinyin : entry.second) {
+            pinyin = ToneHandler::tone_to_number(pinyin);
+        }
+    }
 }
 
 void PinyinData::init_surname_map() {
@@ -1022,6 +1028,10 @@ void PinyinData::init_surname_map() {
         {U'那', "nā"},
         {U'哈', "hǎ"},
     };
+    
+    for (auto& entry : surname_map_) {
+        entry.second = ToneHandler::tone_to_number(entry.second);
+    }
 }
 
 const std::vector<std::string>& PinyinData::get_pinyins(char32_t codepoint) const {
