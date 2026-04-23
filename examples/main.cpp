@@ -384,6 +384,12 @@ int main() {
     COUTLN("    版本: 1.0.0");
     COUTLN("==============================================");
     
+    size_t char_count = PinyinData::instance().total_chars();
+    size_t surname_count = PinyinData::instance().total_surnames();
+    std::ostringstream oss;
+    oss << "\n数据加载状态: 已加载 " << char_count << " 个汉字, " << surname_count << " 个姓氏特殊读音\n";
+    COUTLN(oss.str());
+    
     try {
         demo_basic_conversion();
         demo_name_conversion();
