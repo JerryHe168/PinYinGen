@@ -1,4 +1,5 @@
 #include "pinyin_data.h"
+#include "tone_handler.h"
 #include <mutex>
 #include <fstream>
 #include <sstream>
@@ -194,7 +195,19 @@ bool PinyinData::parse_pinyin_line(const std::string& line, ParseCallback callba
         return true;
     }
     
-    return callback(codepoint, pinyins);
+    std::vector<std::string> normalized_pinyins;
+    for (const auto& p : pinyins) {
+        std::string normalized = ToneHandler::tone_to_number(p);
+        if (!normalized.empty()) {
+            normalized_pinyins.push_back(normalized);
+        }
+    }
+    
+    if (normalized_pinyins.empty()) {
+        return true;
+    }
+    
+    return callback(codepoint, normalized_pinyins);
 }
 
 PinyinData::PinyinData() {

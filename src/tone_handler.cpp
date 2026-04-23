@@ -151,20 +151,39 @@ std::string ToneHandler::tone_to_mark(std::string_view pinyin) {
     }
     
     size_t mark_pos = vowel_positions.back();
-    if (vowel_positions.size() >= 2) {
+    bool has_a = false, has_o = false, has_e = false;
+    size_t a_pos = 0, o_pos = 0, e_pos = 0;
+    
+    for (size_t pos : vowel_positions) {
+        char v = base[pos];
+        if (v == 'a') {
+            has_a = true;
+            a_pos = pos;
+        } else if (v == 'o') {
+            has_o = true;
+            o_pos = pos;
+        } else if (v == 'e') {
+            has_e = true;
+            e_pos = pos;
+        }
+    }
+    
+    if (has_a) {
+        mark_pos = a_pos;
+    } else if (has_o) {
+        mark_pos = o_pos;
+    } else if (has_e) {
+        mark_pos = e_pos;
+    } else if (vowel_positions.size() >= 2) {
         char v1 = base[vowel_positions[0]];
         char v2 = base[vowel_positions[1]];
         
-        if ((v1 == 'a' || v1 == 'o' || v1 == 'e') && 
-            (v2 == 'i' || v2 == 'u' || v2 == 'v')) {
-            mark_pos = vowel_positions[0];
-        } else if ((v1 == 'i' || v1 == 'u') && 
-                   (v2 == 'a' || v2 == 'o' || v2 == 'e')) {
-            mark_pos = vowel_positions[1];
-        } else if (base == "iu" || base == "ui") {
+        if ((v1 == 'i' && v2 == 'u') || (v1 == 'u' && v2 == 'i')) {
             mark_pos = vowel_positions[1];
         } else if (base == "ie" || base == "ue") {
             mark_pos = vowel_positions[1];
+        } else {
+            mark_pos = vowel_positions.back();
         }
     }
     
