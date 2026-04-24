@@ -234,6 +234,15 @@ std::string ToneHandler::convert_tone(std::string_view pinyin, ToneStyle style) 
             return tone_to_number(pinyin);
         case ToneStyle::FirstLetter:
             return get_first_letter(pinyin);
+        case ToneStyle::UppercaseCompact: {
+            std::string result = remove_tone(pinyin);
+            for (char& c : result) {
+                if (c >= 'a' && c <= 'z') {
+                    c = static_cast<char>(std::toupper(c));
+                }
+            }
+            return result;
+        }
         default:
             return std::string(pinyin);
     }

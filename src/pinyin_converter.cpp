@@ -113,31 +113,34 @@ std::string PinyinConverter::to_string(const PinyinResult& result, const Options
     std::ostringstream oss;
     for (size_t i = 0; i < result.pinyins.size(); ++i) {
         if (i > 0 && !result.pinyins[i-1].empty() && !result.pinyins[i].empty()) {
-            char32_t prev_last = 0;
-            char32_t curr_first = 0;
-            
-            if (!result.pinyins[i-1].empty()) {
-                auto u32_prev = EncodingUtils::utf8_to_utf32(result.pinyins[i-1]);
-                if (!u32_prev.empty()) {
-                    prev_last = u32_prev.back();
+            // 对于 UppercaseCompact 风格，不添加分隔符
+            if (options.tone_style != ToneStyle::UppercaseCompact) {
+                char32_t prev_last = 0;
+                char32_t curr_first = 0;
+                
+                if (!result.pinyins[i-1].empty()) {
+                    auto u32_prev = EncodingUtils::utf8_to_utf32(result.pinyins[i-1]);
+                    if (!u32_prev.empty()) {
+                        prev_last = u32_prev.back();
+                    }
                 }
-            }
-            
-            if (!result.pinyins[i].empty()) {
-                auto u32_curr = EncodingUtils::utf8_to_utf32(result.pinyins[i]);
-                if (!u32_curr.empty()) {
-                    curr_first = u32_curr[0];
+                
+                if (!result.pinyins[i].empty()) {
+                    auto u32_curr = EncodingUtils::utf8_to_utf32(result.pinyins[i]);
+                    if (!u32_curr.empty()) {
+                        curr_first = u32_curr[0];
+                    }
                 }
-            }
-            
-            bool prev_is_letter = (prev_last >= U'a' && prev_last <= U'z') || 
-                                   (prev_last >= U'A' && prev_last <= U'Z') ||
-                                   (prev_last >= U'0' && prev_last <= U'9');
-            bool curr_is_letter = (curr_first >= U'a' && curr_first <= U'z') || 
-                                   (curr_first >= U'A' && curr_first <= U'Z');
-            
-            if (prev_is_letter && curr_is_letter) {
-                oss << options.separator;
+                
+                bool prev_is_letter = (prev_last >= U'a' && prev_last <= U'z') || 
+                                       (prev_last >= U'A' && prev_last <= U'Z') ||
+                                       (prev_last >= U'0' && prev_last <= U'9');
+                bool curr_is_letter = (curr_first >= U'a' && curr_first <= U'z') || 
+                                       (curr_first >= U'A' && curr_first <= U'Z');
+                
+                if (prev_is_letter && curr_is_letter) {
+                    oss << options.separator;
+                }
             }
         }
         oss << result.pinyins[i];

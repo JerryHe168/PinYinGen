@@ -11,7 +11,8 @@ enum class ToneStyle {
     None = 0,
     ToneMark = 1,
     ToneNumber = 2,
-    FirstLetter = 3
+    FirstLetter = 3,
+    UppercaseCompact = 4
 };
 
 enum class PolyphoneStrategy {
