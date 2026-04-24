@@ -8,16 +8,11 @@ namespace pinyingen {
 
 namespace {
 
-PolyphoneHandler* g_instance = nullptr;
-std::once_flag g_init_flag;
-
 }
 
 PolyphoneHandler& PolyphoneHandler::instance() {
-    std::call_once(g_init_flag, []() {
-        g_instance = new PolyphoneHandler();
-    });
-    return *g_instance;
+    static PolyphoneHandler instance;
+    return instance;
 }
 
 PolyphoneHandler::PolyphoneHandler() {

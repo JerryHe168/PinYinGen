@@ -14,8 +14,6 @@
 
 namespace pinyingen {
 
-std::once_flag PinyinData::init_flag_;
-PinyinData* PinyinData::instance_ = nullptr;
 std::string PinyinData::data_dir_;
 
 namespace {
@@ -104,10 +102,8 @@ std::string find_data_directory() {
 }
 
 PinyinData& PinyinData::instance() {
-    std::call_once(init_flag_, []() {
-        instance_ = new PinyinData();
-    });
-    return *instance_;
+    static PinyinData instance;
+    return instance;
 }
 
 void PinyinData::set_data_directory(const std::string& dir) {
