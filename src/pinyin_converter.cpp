@@ -48,17 +48,28 @@ std::string PinyinConverter::process_char(
     
     std::string selected;
     
-    switch (options.polyphone_strategy) {
-        case PolyphoneStrategy::First:
-            selected = candidates[0];
-            break;
-        case PolyphoneStrategy::Smart:
-            selected = polyphone.smart_select(text, index, candidates);
-            break;
-        case PolyphoneStrategy::All:
-        default:
-            selected = candidates[0];
-            break;
+    // 检查是否是姓氏（第一个字符）
+    bool is_surname = (index == 0);
+    if (is_surname) {
+        std::string surname_pinyin = polyphone.get_name_pinyin(c, true);
+        if (!surname_pinyin.empty()) {
+            selected = surname_pinyin;
+        }
+    }
+    
+    if (selected.empty()) {
+        switch (options.polyphone_strategy) {
+            case PolyphoneStrategy::First:
+                selected = candidates[0];
+                break;
+            case PolyphoneStrategy::Smart:
+                selected = polyphone.smart_select(text, index, candidates);
+                break;
+            case PolyphoneStrategy::All:
+            default:
+                selected = candidates[0];
+                break;
+        }
     }
     
     std::string result = ToneHandler::convert_tone(selected, options.tone_style);
