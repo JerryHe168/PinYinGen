@@ -179,6 +179,8 @@ NamePinyin NameGenerator::convert_name(
     std::ostringstream full_oss;
     std::ostringstream initials_oss;
     
+    bool is_uppercase_compact = (options.tone_style == ToneStyle::UppercaseCompact);
+    
     full_oss << result.surname;
     initials_oss << ToneHandler::convert_tone(surname_pinyin, ToneStyle::FirstLetter);
     
@@ -196,7 +198,10 @@ NamePinyin NameGenerator::convert_name(
         std::string converted = ToneHandler::convert_tone(pinyin, options.tone_style);
         result.given_name.push_back(converted);
         
-        full_oss << options.separator << converted;
+        if (!is_uppercase_compact) {
+            full_oss << options.separator;
+        }
+        full_oss << converted;
         initials_oss << ToneHandler::convert_tone(pinyin, ToneStyle::FirstLetter);
     }
     

@@ -128,6 +128,7 @@ void demo_basic_conversion() {
         string pinyin_num = to_pinyin(name, ToneStyle::ToneNumber);
         string pinyin_none = to_pinyin(name, ToneStyle::None);
         string initials = get_initials(name);
+        string pinyin_uppercase = to_pinyin(name, ToneStyle::UppercaseCompact);
         
         COUT("  带声调: ");
         COUTLN(pinyin_mark);
@@ -137,6 +138,8 @@ void demo_basic_conversion() {
         COUTLN(pinyin_none);
         COUT("  首字母: ");
         COUTLN(initials);
+        COUT("  全大写: ");
+        COUTLN(pinyin_uppercase);
     }
 }
 
@@ -157,6 +160,7 @@ void demo_name_conversion() {
         COUT("\n姓名: ");
         COUTLN(name);
         NamePinyin np = name_to_pinyin(name, ToneStyle::ToneMark);
+        NamePinyin np_uppercase = name_to_pinyin(name, ToneStyle::UppercaseCompact);
         
         COUT("  姓氏拼音: ");
         COUTLN(np.surname);
@@ -170,6 +174,8 @@ void demo_name_conversion() {
         COUTLN(np.full_pinyin);
         COUT("  拼音首写: ");
         COUTLN(np.initials);
+        COUT("  全大写: ");
+        COUTLN(np_uppercase.full_pinyin);
     }
 }
 
@@ -186,7 +192,7 @@ void demo_polyphone_handling() {
         "爱好",
         "都是",
         "首都",
-        "长发",
+        "好长的头发",
         "长大"
     };
     
@@ -287,6 +293,10 @@ void demo_tone_styles() {
     opts.tone_style = ToneStyle::FirstLetter;
     COUT("首字母:   ");
     COUTLN(to_pinyin(text, ToneStyle::FirstLetter));
+    
+    opts.tone_style = ToneStyle::UppercaseCompact;
+    COUT("全大写连续: ");
+    COUTLN(to_pinyin(text, ToneStyle::UppercaseCompact));
 }
 
 void demo_encoding_utils() {
