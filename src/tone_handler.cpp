@@ -180,8 +180,6 @@ std::string ToneHandler::tone_to_mark(std::string_view pinyin) {
         
         if ((v1 == 'i' && v2 == 'u') || (v1 == 'u' && v2 == 'i')) {
             mark_pos = vowel_positions[1];
-        } else if (base == "ie" || base == "ue") {
-            mark_pos = vowel_positions[1];
         } else {
             mark_pos = vowel_positions.back();
         }
