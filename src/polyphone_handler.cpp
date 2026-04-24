@@ -184,6 +184,7 @@ std::string PolyphoneHandler::get_name_pinyin(char32_t codepoint, bool is_surnam
         if (it != surname_defaults_.end()) {
             return it->second;
         }
+        return {};
     }
     
     auto it = name_defaults_.find(codepoint);
