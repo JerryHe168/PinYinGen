@@ -55,8 +55,6 @@ private:
     bool loaded_from_files_ = false;
     
     static std::string data_dir_;
-    static std::once_flag init_flag_;
-    static PinyinData* instance_;
 };
 
 }
